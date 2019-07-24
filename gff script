@@ -1,0 +1,19 @@
+	# print from gtf file
+	awk -F "\t" '$3=="transcript"{print $9, $5-$4}' file.gtf > output.txt
+	awk -F "\t" '$3=="transcript" {print $9 "\t" $1 "\t" $4  "\t" $5 "\t" $5-$4+1}' tdsd_merged_paired.gtf >tdsd_merged_paired.txt
+  
+  
+  			
+awk '{print $3}' Triticum_aestivum.IWGSC.41.gtf | sort | uniq
+awk -F"\t" '{print $3}' paired_PSTNWR-3.gtf|grep -c transcript
+cat merged_paired.gtf | grep -v "^#" | awk '$3=="transcript" {print}' | wc -l
+awk -F "\t" '$3=="transcript"{print $9, $5-$4}' file.gtf > output.txt
+awk -F "\t" '$3=="transcript"' paired_PSTDSWR-4.gtf | awk -F "\t" '$4=="1351"'
+
+awk '{print $3}' GCF_003121395.1_UOA_WB_1_genomic.gtf | sort | uniq
+awk -F "\t" '$3 == "exon" { print $9 }' GCF_003121395.1_UOA_WB_1_genomic.gtf |awk -F "; " ' $4 ~ "gbkey \"ncRNA\""' | grep -c ncRNA
+awk -F "\t" '$3 == "gene" { print $9 }' GCF_003121395.1_UOA_WB_1_genomic.gtf |awk -F "; " ' $5 ~ "gene_biotype \"snRNA\""' | grep -c snRNA
+
+awk '$3 == "CDS" {print}' GCF_003121395.1_UOA_WB_1_genomic.gtf  | awk -F "; " '{print $4} '| grep -c "ncRNA"
+
+
