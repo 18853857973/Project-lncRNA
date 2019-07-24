@@ -1,0 +1,356 @@
+1.	hisat2 index
+
+	gunzip Triticum_aestivum.IWGSC.dna.toplevel.fa.gz
+
+	Build the reference index
+	hisat2-build -p 20 -f Triticum_aestivum.IWGSC.dna.toplevel.fa Triticum_aestivum_ref
+		[uba@webapp animesh]$ {hisat2-build Triticum_aestivum.IWGSC.dna.toplevel.fa Triticum_aestivum.IW_ref
+		Settings:
+		Output files: "Triticum_aestivum.IW_ref.*.ht2l"
+		Total time for call to driver() for forward index: 03:43:07
+
+				[uba@webapp 2_hisat2_index]$ /backup/uba/animesh/hisat2-2.1.0/hisat2-build -p 20 -f Triticum_ae                           stivum.IWGSC.dna.toplevel.fa Triticum_aestivum_ref
+				Settings:
+				  Output files: "Triticum_aestivum_ref.*.ht2l"
+				  Line rate: 7 (line is 128 bytes)
+				  Lines per side: 1 (side is 128 bytes)
+				  Offset rate: 4 (one in 16)
+				  FTable chars: 10
+				  Strings: unpacked
+				  Local offset rate: 3 (one in 8)
+				  Local fTable chars: 6
+				  Local sequence length: 57344
+				  Local sequence overlap between two consecutive indexes: 1024
+				  Endianness: little
+				  Actual local endianness: little
+				  Sanity checking: disabled
+				  Assertions: disabled
+				  Random seed: 0
+				  Sizeofs: void*:8, int:4, long:8, size_t:8
+				Input files DNA, FASTA:
+				  Triticum_aestivum.IWGSC.dna.toplevel.fa
+				Reading reference sizes
+				  Time reading reference sizes: 00:02:49
+				Calculating joined length
+				Writing header
+				Reserving space for joined string
+				Joining reference sequences
+				  Time to join reference sequences: 00:02:03
+				  Time to read SNPs and splice sites: 00:00:00
+				Using parameters --bmax 2675921041 --dcv 1024
+				  Doing ahead-of-time memory usage test
+				  Passed!  Constructing with these parameters: --bmax 2675921041 --dcv 1024
+				Constructing suffix-array element generator
+				Building DifferenceCoverSample
+				  Building sPrime
+				  Building sPrimeOrder
+				  V-Sorting samples
+				  V-Sorting samples time: 00:04:22
+				  Allocating rank array
+				  Ranking v-sort output
+				  Ranking v-sort output time: 00:02:35
+				  Invoking Larsson-Sadakane on ranks
+				  Invoking Larsson-Sadakane on ranks time: 00:05:03
+				  Sanity-checking and returning
+				Building samples
+				Reserving space for 12 sample suffixes
+				Generating random suffixes
+				QSorting 12 sample offsets, eliminating duplicates
+				QSorting sample offsets, eliminating duplicates time: 00:00:00
+				Multikey QSorting 12 samples
+				  (Using difference cover)
+				  Multikey QSorting samples time: 00:00:00
+				Calculating bucket sizes
+				Splitting and merging
+				  Splitting and merging time: 00:00:00
+				Split 1, merged 6; iterating...
+				Splitting and merging
+				  Splitting and merging time: 00:00:00
+				Avg bucket size: 2.0388e+09 (target: 2675921040)
+				Converting suffix-array elements to index image
+				Allocating ftab, absorbFtab
+				Entering GFM loop
+				Getting block 1 of 7
+				  Reserving size (2675921041) for bucket 1
+				Getting block 4 of 7
+				  Reserving size (2675921041) for bucket 4
+				Getting block 3 of 7
+				  Reserving size (2675921041) for bucket 3
+				Getting block 5 of 7
+				  Reserving size (2675921041) for bucket 5
+				Getting block 2 of 7
+				  Reserving size (2675921041) for bucket 2
+				Getting block 6 of 7
+				  Reserving size (2675921041) for bucket 6
+				  Calculating Z arrays for bucket 5
+				  Calculating Z arrays for bucket 2
+				  Entering block accumulator loop for bucket 5:
+				  Entering block accumulator loop for bucket 2:
+				  Calculating Z arrays for bucket 1
+				  Entering block accumulator loop for bucket 1:
+				  Calculating Z arrays for bucket 6
+				  Calculating Z arrays for bucket 4
+				  Calculating Z arrays for bucket 3
+				  Entering block accumulator loop for bucket 6:
+				  Entering block accumulator loop for bucket 4:
+				  Entering block accumulator loop for bucket 3:
+				Getting block 7 of 7
+				  Reserving size (2675921041) for bucket 7
+				  Calculating Z arrays for bucket 7
+				  Entering block accumulator loop for bucket 7:
+				  bucket 3: 10%
+				  bucket 2: 10%
+				  bucket 7: 10%
+				  bucket 5: 10%
+				  bucket 3: 20%
+				  bucket 2: 20%
+				  bucket 1: 10%
+				  bucket 7: 20%
+				  bucket 4: 10%
+				  bucket 3: 30%
+				  bucket 2: 30%
+				  bucket 7: 30%
+				  bucket 5: 20%
+				  bucket 3: 40%
+				  bucket 6: 10%
+				  bucket 1: 20%
+				  bucket 2: 40%
+				  bucket 7: 40%
+				  bucket 5: 30%
+				  bucket 3: 50%
+				  bucket 2: 50%
+				  bucket 7: 50%
+				  bucket 4: 20%
+				  bucket 3: 60%
+				  bucket 2: 60%
+				  bucket 1: 30%
+				  bucket 7: 60%
+				  bucket 5: 40%
+				  bucket 3: 70%
+				  bucket 7: 70%
+				  bucket 2: 70%
+				  bucket 6: 20%
+				  bucket 5: 50%
+				  bucket 3: 80%
+				  bucket 7: 80%
+				  bucket 1: 40%
+				  bucket 2: 80%
+				  bucket 4: 30%
+				  bucket 3: 90%
+				  bucket 5: 60%
+				  bucket 7: 90%
+				  bucket 2: 90%
+				  bucket 3: 100%
+				  Sorting block of length 2290883584 for bucket 3
+				  (Using difference cover)
+				  bucket 7: 100%
+				  Sorting block of length 1949657142 for bucket 7
+				  (Using difference cover)
+				  bucket 1: 50%
+				  bucket 6: 30%
+				  bucket 5: 70%
+				  bucket 2: 100%
+				  Sorting block of length 2432238546 for bucket 2
+				  (Using difference cover)
+				  bucket 1: 60%
+				  bucket 4: 40%
+				  bucket 1: 70%
+				  bucket 1: 80%
+				  bucket 5: 80%
+				  bucket 1: 90%
+				  bucket 6: 40%
+				  bucket 4: 50%
+				  bucket 1: 100%
+				  Sorting block of length 2249443546 for bucket 1
+				  (Using difference cover)
+				  bucket 5: 90%
+				  bucket 4: 60%
+				  bucket 6: 50%
+				  bucket 5: 100%
+				  Sorting block of length 2174069498 for bucket 5
+				  (Using difference cover)
+				  bucket 4: 70%
+				  bucket 6: 60%
+				  bucket 4: 80%
+				  bucket 4: 90%
+				  bucket 6: 70%
+				  bucket 4: 100%
+				  Sorting block of length 1360845012 for bucket 4
+				  (Using difference cover)
+				  bucket 6: 80%
+				  bucket 6: 90%
+				  bucket 6: 100%
+				  Sorting block of length 1814441553 for bucket 6
+				  (Using difference cover)
+				  Sorting block time: 00:39:43
+				Returning block of 1360845013 for bucket 4
+				  Sorting block time: 00:57:09
+				Returning block of 1949657143 for bucket 7
+				  Sorting block time: 00:54:34
+				Returning block of 1814441554 for bucket 6
+				  Sorting block time: 01:07:47
+				Returning block of 2290883585 for bucket 3
+				  Sorting block time: 01:06:20
+				Returning block of 2249443547 for bucket 1
+				  Sorting block time: 01:04:10
+				Returning block of 2174069499 for bucket 5
+				  Sorting block time: 01:13:52
+				Returning block of 2432238547 for bucket 2
+				Exited GFM loop
+				fchr[A]: 0
+				fchr[C]: 3849574166
+				fchr[G]: 7135747730
+				fchr[T]: 10421705896
+				fchr[$]: 14271578887
+				Exiting GFM::buildToDisk()
+				Returning from initFromVector
+				Wrote 4782216605 bytes to primary GFM file: Triticum_aestivum_ref.1.ht2l
+				Wrote 7135789452 bytes to secondary GFM file: Triticum_aestivum_ref.2.ht2l
+				Re-opening _in1 and _in2 as input streams
+				Returning from GFM constructor
+				Returning from initFromVector
+				Wrote 6303322031 bytes to primary GFM file: Triticum_aestivum_ref.5.ht2l
+				Wrote 3633074612 bytes to secondary GFM file: Triticum_aestivum_ref.6.ht2l
+				Re-opening _in5 and _in5 as input streams
+				Returning from HierEbwt constructor
+				Headers:
+					len: 14271578887
+					gbwtLen: 14271578888
+					nodes: 14271578888
+					sz: 3567894722
+					gbwtSz: 3567894723
+					lineRate: 7
+					offRate: 4
+					offMask: 0xfffffffffffffff0
+					ftabChars: 10
+					eftabLen: 0
+					eftabSz: 0
+					ftabLen: 1048577
+					ftabSz: 8388616
+					offsLen: 891973681
+					offsSz: 7135789448
+					lineSz: 128
+					sideSz: 128
+					sideGbwtSz: 96
+					sideGbwtLen: 384
+					numSides: 37165571
+					numLines: 37165571
+					gbwtTotLen: 4757193088
+					gbwtTotSz: 4757193088
+					reverse: 0
+					linearFM: Yes
+				Total time for call to driver() for forward index: 03:28:41
+
+
+
+		
+2.	Map the reads for each sample to the reference genome:
+	
+	/backup/uba/animesh/hisat2-2.1.0/hisat2 -p 20 -q --dta -x /backup/uba/animesh/2_hisat2_index/Triticum_aestivum_ref -1 /backup/uba/animesh/1_trimmed_reads/paired_PSTNWR-1_R1.fastq -2 /backup/uba/animesh/1_trimmed_reads/paired_PSTNWR-1_R2.fastq -S paired_PSTNWR-1.sam
+
+		34765376 reads; of these:
+		  34765376 (100.00%) were paired; of these:
+			9482376 (27.28%) aligned concordantly 0 times
+			20842587 (59.95%) aligned concordantly exactly 1 time
+			4440413 (12.77%) aligned concordantly >1 times
+			----
+			9482376 pairs aligned concordantly 0 times; of these:
+			  319297 (3.37%) aligned discordantly 1 time
+			----
+			9163079 pairs aligned 0 times concordantly or discordantly; of these:
+			  18326158 mates make up the pairs; of these:
+				16609314 (90.63%) aligned 0 times
+				1041402 (5.68%) aligned exactly 1 time
+				675442 (3.69%) aligned >1 times
+		76.11% overall alignment rate
+		
+		40689150 reads; of these:
+		  40689150 (100.00%) were paired; of these:
+			10814608 (26.58%) aligned concordantly 0 times
+			23654972 (58.14%) aligned concordantly exactly 1 time
+			6219570 (15.29%) aligned concordantly >1 times
+			----
+			10814608 pairs aligned concordantly 0 times; of these:
+			  2910966 (26.92%) aligned discordantly 1 time
+			----
+			7903642 pairs aligned 0 times concordantly or discordantly; of these:
+			  15807284 mates make up the pairs; of these:
+				9480132 (59.97%) aligned 0 times
+				3197270 (20.23%) aligned exactly 1 time
+				3129882 (19.80%) aligned >1 times
+		88.35% overall alignment rate
+
+		34345362 reads; of these:
+		  34345362 (100.00%) were paired; of these:
+			6818591 (19.85%) aligned concordantly 0 times
+			22623254 (65.87%) aligned concordantly exactly 1 time
+			4903517 (14.28%) aligned concordantly >1 times
+			----
+			6818591 pairs aligned concordantly 0 times; of these:
+			  404124 (5.93%) aligned discordantly 1 time
+			----
+			6414467 pairs aligned 0 times concordantly or discordantly; of these:
+			  12828934 mates make up the pairs; of these:
+				10978230 (85.57%) aligned 0 times
+				1142167 (8.90%) aligned exactly 1 time
+				708537 (5.52%) aligned >1 times
+		84.02% overall alignment rate
+
+		32999587 reads; of these:
+		  32999587 (100.00%) were paired; of these:
+			10207398 (30.93%) aligned concordantly 0 times
+			17923952 (54.32%) aligned concordantly exactly 1 time
+			4868237 (14.75%) aligned concordantly >1 times
+			----
+			10207398 pairs aligned concordantly 0 times; of these:
+			  1987096 (19.47%) aligned discordantly 1 time
+			----
+			8220302 pairs aligned 0 times concordantly or discordantly; of these:
+			  16440604 mates make up the pairs; of these:
+				11770203 (71.59%) aligned 0 times
+				2287983 (13.92%) aligned exactly 1 time
+				2382418 (14.49%) aligned >1 times
+		82.17% overall alignment rate
+
+
+3.	#Sort and convert the SAM files to BAM:
+	samtools view -@ 20 -u paired_PSTNWR-1.sam | samtools sort -@ 20 -o paired_PSTNWR-1.bam
+
+	shell script
+
+
+
+4.	Assemble transcripts for each sample:
+	/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie -p 30 -G /backup/uba/animesh/2_hisat2_index/Triticum_aestivum.IWGSC.41.gtf -o paired_PSTNWR-1.gtf -l paired_PSTNWR-1 paired_PSTNWR-1.bam
+
+	Assemble and estimate transcript abundances (if run before merge, will estimate abundence for each situation)
+	/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie -e -p 30 -G /backup/uba/animesh/2_hisat2_index/Triticum_aestivum.IWGSC.41.gtf -o paired_PSTNWR-1.gtf paired_PSTNWR-1.bam -A paired_PSTNWR-1.adundance -C paired_PSTNWR-1.fullycovered 
+		generate .abundances, .fullycovered, .gtf
+
+
+5.	Merge transcripts from all samples:
+	/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie --merge -p 30 -G /backup/uba/animesh/2_hisat2_index/Triticum_aestivum.IWGSC.41.gtf -o merged_paired.gtf mergelist.txt
+
+
+6.	Estimate transcript abundances and create table counts for Ballgown:
+	/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie -e -B -p 30 -G merged.combined.gtf -o ballgown_paired_PSTNWR-1.gtf paired_PSTNWR-1.bam
+
+	tctd
+	scsd
+	tcsc
+	tdsd
+
+
+	merge	/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie --merge -p 30 -G /backup/uba/animesh/2_hisat2_index/Triticum_aestivum.IWGSC.41.gtf -o tolerant_merged_paired.gtf tolerant_mergelist.txt
+	abundance, 	/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie -e -B -p 30 -G tolerant_merged_paired.gtf -o tolerant_ballgown_paired_PSTNWR-1.gtf paired_PSTNWR-1.bam
+	tablecount
+
+
+
+
+7.	Run python prepDE.py -i /backup/uba1/animesh/4_differential_expression/tctd/tctd_sample_lst.txt (server 9)
+	"/usr/local/bin/python2.7" prepDE.py -i sample_list.txt
+	gene_count_matrix.csv
+	transcript_count_matrix.csv
+
+	/backup/uba/animesh/cufflinks-2.2.1.Linux_x86_64/gffread -w stringtie.fasta -g "/backup/uba/animesh/2. hisat2_index/Triticum_aestivum.IWGSC.dna.toplevel.fa" "/backup/uba/animesh/4. assembly/stringtie_merged_paired.gtf
