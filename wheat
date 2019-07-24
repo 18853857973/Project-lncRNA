@@ -1,0 +1,76 @@
+1. Data -- assembled wheat rna seq data (paired end)
+
+2. Transcript greater then 200 --  sequence greater than 200nt, 
+		perl removesmalls.pl 200 wheat_all_contigs.fasta > wheat_contigs-200.fasta
+
+365752 sequence (RNA seq transcript/wheat_contigs-200.fasta)
+
+3. ORF predictor  
+	
+154944 seq(output2.fasta)		
+	
+			output2.fasta broken into 
+			new1.fasta	50095460-F170-11E8-979A-BE2BD5D51216
+			new2.fasta	1E620960-F171-11E8-979A-EC0462A04DAF
+			new3.fasta	08AFC760-F216-11E8-979A-80DCC2CC534C
+
+3. ORF predictor  
+	
+	3a.	predict ORF
+			perl OrfPredictor.pl wheat_contigs-200.fasta blastx 0 both 1 output
+
+			output is protein seq with orf
+			no ORF - 771 seq
+			with ORF (output) - 364981 seq
+		364981 seq (orf sequence)
+
+	3b.	orf less than 100 aa kept -- sequence greater than 300nt/100aa discarded, 
+			perl removesmalls.pl 100 output > output+100.fasta
+		154944 seq (output+100.fasta)
+
+	3c.	extractCDS from RNA seq transcript as per output+100.fasta
+			perl extractCDS.pl wheat_contigs-200.fasta output+100.fasta ORFoutput
+			ORFoutput is RNAseq transcript sequence with ORF portion less than 100 aa (nt) 
+		154944 seq (ORFoutput)			
+
+4. coding potential calculator -- >=0.5 CPC score discarded
+			first.fasta		181128106383774		result_cpc2_first.txt
+			second.fasta	181128255421285		result_cpc2_second.txt
+			third.fasta		181128325501663		result_cpc2_third.txt
+			
+			result_cpc2.txt		combined resultcpc2
+			discard_cpc.txt			id having score >= 0.5 ie, coding
+		1188 ids
+			discard.pl			discard ids(discard_cpc.txt) from fasta file(ORFoutput)
+			CPCoutputFinal.fasta	fasta file with no CPC < 0.5 ie non-coding
+	153756 seq with no CPC
+
+5.	House Keeping Genes
+			SILVA (SSU Ref NR 99, LSU Ref) rRNA data -- two project for SSU and LSU
+		195 seq removed SSU
+		4093 seq removed LSU
+	
+			http://noncode.org NONCODE (current version v5.0) is an integrated knowledge database dedicated to non-coding RNAs (excluding tRNAs and rRNAs) 
+		366 seq removed
+	
+			http://www.plantrdnadatabase.com/ Plant rDNA database
+	
+			http://gtrnadb2009.ucsc.edu/ Genomic tRNA database
+		179 seq removed
+
+	4833 (4658 unique seq)
+	149098 seq for blsatx
+	
+		makeblastdb –in alltrnas.fasta –dbtype nucl –parse_seqids
+		blastn –db new.fasta –query CPCoutputFinal.fasta –out results_trna.fasta  -evalue 10 -num_threads 4 -outfmt 6
+
+6.	Blast nr pfam -- Blast with nr+pfam db
+
+		Available blastx
+			45141 blastx seq (31026 unique)
+			8913 No Hit found (PotentialLncRna.fasta - 4894 sequence)
+		
+		Not available blastx
+			142706 sequence in which blastx need to be done
+
+
