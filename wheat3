@@ -1,0 +1,410 @@
+Pipeline for the linux environment
+
+Raw reads of wheat
+F:\fastqc>java -jar Trimmomatic-0.38\trimmomatic-0.38.jar SE -phred33 Leafcontro
+l.fastq Leafcontroltrimmed1.fq ILLUMINACLIP:TruSeq3-SE:2:30:10 LEADING:3 TRAILIN
+G:3 SLIDINGWINDOW:4:20 MINLEN:36 HEADCROP:10 CROP:300
+
+
+Check quality of reads (FastQC)
+Trimming reads (remove adapter,etc.) 
+Filtered to Clean Reads (SolexaQA)
+
+
+Mapped with genome using TopHat 
+
+Bowtie2 index file to be generated 
+# Merge all E. coli reference genomes into one genomes.fna file 
+cat ref_genomes/ecoli/*.fna > genomes.fna
+# create bowtie2 index database (database name: ecoli)
+bowtie2-build genomes.fna ecoli
+# use 'inspect' to check the content of your database
+bowtie2-inspect -n ecoli
+# define your BOWTIE2_INDEXES directory and move the database files into it
+export BOWTIE2_INDEXES=/path/to/my/bowtie2/databases/
+cp *.bt2 $BOWTIE2_INDEXES
+# Bowtie2 mapping 
+# map reads (sample.fastq) against the E. coli genome database 'ecoli'. database is defined by option -x 
+bowtie2 -x ecoli -1 SAMPLE_r1.fastq -2 SAMPLE_r2.fastq -U SAMPLE_single_reads.fastq --no-unal -p 12 -S SAMPLE.sam
+
+	/opt/software/bin/python2.7 /backup/uba/animesh/hisat2-2.1.0/extract_splice_sites.py Triticum_aestivum.IWGSC1.0+popseq.27.gtf >Triticum_aestivum.IWGSC.ss
+	/opt/software/bin/python2.7 /backup/uba/animesh/hisat2-2.1.0/extract_exons.py Triticum_aestivum.IWGSC1.0+popseq.27.gtf >Triticum_aestivum.IWGSC.exon
+
+	
+1.	hisat2 index
+
+	gunzip Triticum_aestivum.IWGSC.dna.toplevel.fa.gz
+	
+	Build the reference index
+	hisat2-build -p 20 -f Triticum_aestivum.IWGSC.dna.toplevel.fa Triticum_aestivum_ref
+		[uba@webapp animesh]$ {hisat2-build Triticum_aestivum.IWGSC.dna.toplevel.fa Triticum_aestivum.IW_ref
+		Settings:
+		Output files: "Triticum_aestivum.IW_ref.*.ht2l"
+		Total time for call to driver() for forward index: 03:43:07
+	
+	
+2.	Map the reads for each sample to the reference genome:
+
+
+for i in $(ls *.fastq | rev | cut -c 10- |rev | uniq); do echo /backup/uba/animesh/hisat2-2.1.0/hisat2 -p 20 -q --dta -x /backup/uba/animesh/2_hisat2_index/Triticum_aestivum_ref -1 ${i}_R1.fastq -2 ${i}_R2.fastq -S /backup/uba/animesh/${i}.bam;done
+
+	
+	/backup/uba/animesh/hisat2-2.1.0/hisat2 -p 20 -q --dta -x /backup/uba/animesh/2_hisat2_index/Triticum_aestivum_ref -1 /backup/uba/animesh/1_trimmed_reads/paired_PSTNWR-1_R1.fastq -2 /backup/uba/animesh/1_trimmed_reads/paired_PSTNWR-1_R2.fastq -S paired_PSTNWR-1.sam
+
+paired_PSTNWR-1		
+		34765376 reads; of these:
+		34765376 (100.00%) were paired; of these:
+		9482376 (27.28%) aligned concordantly 0 times
+		20842587 (59.95%) aligned concordantly exactly 1 time
+		4440413 (12.77%) aligned concordantly >1 times
+		----
+		9482376 pairs aligned concordantly 0 times; of these:
+		  319297 (3.37%) aligned discordantly 1 time
+		----
+		9163079 pairs aligned 0 times concordantly or discordantly; of these:
+		  18326158 mates make up the pairs; of these:
+			16609314 (90.63%) aligned 0 times
+			1041402 (5.68%) aligned exactly 1 time
+			675442 (3.69%) aligned >1 times
+	76.11% overall alignment rate
+
+paired_PSTNWR-3
+		40689150 reads; of these:
+		40689150 (100.00%) were paired; of these:
+		10814608 (26.58%) aligned concordantly 0 times
+		23654972 (58.14%) aligned concordantly exactly 1 time
+		6219570 (15.29%) aligned concordantly >1 times
+		----
+		10814608 pairs aligned concordantly 0 times; of these:
+		  2910966 (26.92%) aligned discordantly 1 time
+		----
+		7903642 pairs aligned 0 times concordantly or discordantly; of these:
+		  15807284 mates make up the pairs; of these:
+			9480132 (59.97%) aligned 0 times
+			3197270 (20.23%) aligned exactly 1 time
+			3129882 (19.80%) aligned >1 times
+	88.35% overall alignment rate
+
+paired_PSTDSWR-2
+		34345362 reads; of these:
+		34345362 (100.00%) were paired; of these:
+		6818591 (19.85%) aligned concordantly 0 times
+		22623254 (65.87%) aligned concordantly exactly 1 time
+		4903517 (14.28%) aligned concordantly >1 times
+		----
+		6818591 pairs aligned concordantly 0 times; of these:
+		  404124 (5.93%) aligned discordantly 1 time
+		----
+		6414467 pairs aligned 0 times concordantly or discordantly; of these:
+		  12828934 mates make up the pairs; of these:
+			10978230 (85.57%) aligned 0 times
+			1142167 (8.90%) aligned exactly 1 time
+			708537 (5.52%) aligned >1 times
+	84.02% overall alignment rate
+
+paired_PSTDSWR-4
+		32999587 reads; of these:
+		32999587 (100.00%) were paired; of these:
+		10207398 (30.93%) aligned concordantly 0 times
+		17923952 (54.32%) aligned concordantly exactly 1 time
+		4868237 (14.75%) aligned concordantly >1 times
+		----
+		10207398 pairs aligned concordantly 0 times; of these:
+		  1987096 (19.47%) aligned discordantly 1 time
+		----
+		8220302 pairs aligned 0 times concordantly or discordantly; of these:
+		  16440604 mates make up the pairs; of these:
+			11770203 (71.59%) aligned 0 times
+			2287983 (13.92%) aligned exactly 1 time
+			2382418 (14.49%) aligned >1 times
+	82.17% overall alignment rate
+
+	
+3.	#Sort and convert the SAM files to BAM:
+	samtools sort -@ 20 -o paired_PSTNWR-1.bam paired_PSTNWR-1.sam
+	samtools view -@ 20 -u paired_PSTNWR-1.sam | samtools sort -@ 20 -o paired_PSTNWR-1.bam
+	
+	#htseq-count	
+	
+4.	Assemble transcripts for each sample:
+	/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie -p 30 -G /backup/uba/animesh/2_hisat2_index/Triticum_aestivum.IWGSC.41.gtf -o paired_PSTNWR-1.gtf -l paired_PSTNWR-1 paired_PSTNWR-1.bam
+
+	Assemble and estimate transcript abundances (if run before merge, will estimate abundence for each situation)
+	/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie -e -p 30 -G /backup/uba/animesh/2_hisat2_index/Triticum_aestivum.IWGSC.41.gtf -o paired_PSTNWR-1.gtf paired_PSTNWR-1.bam -A paired_PSTNWR-1.adundance -C paired_PSTNWR-1.fullycovered 
+		generate .abundances, .fullycovered, .gtf
+
+5.	Merge transcripts from all samples:
+	/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie --merge -p 30 -G /backup/uba/animesh/2_hisat2_index/Triticum_aestivum.IWGSC.41.gtf -o merged_paired.gtf mergelist.txt
+
+		@@@@@@@@@@@@@
+			cat merged_paired.gtf | grep -v "^#" | awk '$3=="transcript" {print}' | wc -l
+			187188
+
+			grep -c "^>" sc.fasta
+
+			
+			Examine how the transcripts compare to the reference annotation (optional):
+			$ gffcompare –r chrX_data/genes/chrX.gtf –G –o mergedstringtie_merged.gtf
+			/backup/uba/animesh/cufflinks-2.2.1.Linux_x86_64/cuffcompare -r /backup/uba/animesh/2_hisat2_index/Triticum_aestivum.IWGSC.41.gtf -G -o merged merged_paired.gtf
+				
+				
+				output:	merged.stats
+					merged.combined.gtf
+					merged.merged_paired.gtf.ref
+					mapmerged.loci
+					merged.merged_paired.gtf.tmap
+					merged.tracking
+					
+			cat merged.stats
+			#= Summary for dataset: merged_paired.gtf :
+			#     Query mRNAs :  187188 in  138813 loci  (133731 multi-exon transcripts)
+			#            (28765 multi-transcript loci, ~1.3 transcripts per locus)
+			# Reference mRNAs :  146518 in  120586 loci  (106275 multi-exon)
+			# Super-loci w/ reference transcripts:   119003
+			#--------------------|   Sn   |  Sp   |  fSn |  fSp
+					Base level:     100.0    84.7     -       -
+					Exon level:     101.9    88.3   100.0    90.0
+				  Intron level:     100.0    92.6   100.0    94.5
+			Intron chain level:     100.0    79.5   100.0    88.9
+			  Transcript level:     100.0    78.3    98.1    76.8
+				   Locus level:     100.0    86.4   100.0    86.4
+
+				 Matching intron chains:  106312
+						  Matching loci:  120586
+
+					  Missed exons:       0/548858  (  0.0%)
+					   Novel exons:   48934/633099  (  7.7%)
+					Missed introns:      85/420232  (  0.0%)
+					 Novel introns:   25789/453965  (  5.7%)
+					   Missed loci:       0/120586  (  0.0%)
+						Novel loci:   18702/138813  ( 13.5%)
+
+			Total union super-loci across all input datasets: 138813
+
+		@@@@@@@@@@@@@@@
+	
+6.	Estimate transcript abundances and create table counts for Ballgown:
+	/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie -e -B -p 30 -G merged.combined.gtf -o ballgown_paired_PSTNWR-1.gtf paired_PSTNWR-1.bam
+
+	ballgown_paired_PSTNWR-1.gtf
+	ballgown_paired_PSTDSWR-2.gtf
+	ballgown_paired_PSTNWR-3.gtf
+	ballgown_paired_PSTDSWR-4.gtf
+	4 folder with .ctab
+	
+	tctd
+	scsd
+	tcsc
+	tdsd
+
+
+merge	/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie --merge -p 30 -G /backup/uba/animesh/2_hisat2_index/Triticum_aestivum.IWGSC.41.gtf -o tolerant_merged_paired.gtf tolerant_mergelist.txt
+abundance, 	/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie -e -B -p 30 -G tolerant_merged_paired.gtf -o tolerant_ballgown_paired_PSTNWR-1.gtf paired_PSTNWR-1.bam
+tablecount
+	
+7.	Run python prepDE.py -i /backup/uba1/animesh/4_differential_expression/tctd/tctd_sample_lst.txt (server 9)
+	gene_count_matrix.csv
+	transcript_count_matrix.csv
+	
+	/backup/uba/animesh/cufflinks-2.2.1.Linux_x86_64/gffread -w tc.fasta -g "/backup/uba/animesh/2_hisat2_index/Triticum_aestivum.IWGSC.dna.toplevel.fa" "/backup/uba/animesh/3_hisat2_dta/paired_PSTNWR-1.gtf"
+
+	# print from gtf file
+	awk -F "\t" '$3=="transcript"{print $9, $5-$4}' file.gtf > output.txt
+	awk -F "\t" '$3=="transcript" {print $9 "\t" $1 "\t" $4  "\t" $5 "\t" $5-$4+1}' tdsd_merged_paired.gtf >tdsd_merged_paired.txt
+	
+	
+	
+	
+"/backup/uba/animesh/2. hisat2_index/Triticum_aestivum.IW_ref.2.ht2l"
+
+	/backup/uba/animesh/hisat2-2.1.0/hisat2 -x /backup/uba/animesh/Triticum_aestivum.IW_ref -1 /backup/uba/animesh/trimmed_reads/paired_PSTNWR-1_R1.fastq -2 /backup/uba/animesh/trimmed_reads/paired_PSTNWR-1_R2.fastq -S /backup/uba/animesh/hisat2_result/paired_PSTNWR-1.sam
+		34765376 (100.00%) were paired; of these:
+		9215483 (26.51%) aligned concordantly 0 times
+		21028587 (60.49%) aligned concordantly exactly 1 time
+		4521306 (13.01%) aligned concordantly >1 times
+		----
+		9215483 pairs aligned concordantly 0 times; of these:
+		  311491 (3.38%) aligned discordantly 1 time
+		----
+		8903992 pairs aligned 0 times concordantly or discordantly; of these:
+		  17807984 mates make up the pairs; of these:
+			16268120 (91.35%) aligned 0 times
+			938180 (5.27%) aligned exactly 1 time
+			601684 (3.38%) aligned >1 times
+		76.60% overall alignment rate
+
+	/backup/uba/animesh/hisat2-2.1.0/hisat2 -x /backup/uba/animesh/Triticum_aestivum.IW_ref -1 /backup/uba/animesh/trimmed_reads/paired_PSTDSWR-2_R1.fastq -2 /backup/uba/animesh/trimmed_reads/paired_PSTDSWR-2_R2.fastq -S /backup/uba/animesh/hisat2_result/paired_PSTDSWR-2.sam
+	
+	34345362 reads; of these:
+	  34345362 (100.00%) were paired; of these:
+		6554829 (19.09%) aligned concordantly 0 times
+		22817416 (66.44%) aligned concordantly exactly 1 time
+		4973117 (14.48%) aligned concordantly >1 times
+		----
+		6554829 pairs aligned concordantly 0 times; of these:
+		  397387 (6.06%) aligned discordantly 1 time
+		----
+		6157442 pairs aligned 0 times concordantly or discordantly; of these:
+		  12314884 mates make up the pairs; of these:
+			10625212 (86.28%) aligned 0 times
+			1047220 (8.50%) aligned exactly 1 time
+			642452 (5.22%) aligned >1 times
+	84.53% overall alignment rate
+	You have new mail in /var/spool/mail/uba
+	
+	/backup/uba/animesh/hisat2-2.1.0/hisat2 -p 8 -x /backup/uba/animesh/Triticum_aestivum.IW_ref -1 /backup/uba/animesh/trimmed_reads/paired_PSTNWR-3_R1.fastq -2 /backup/uba/animesh/trimmed_reads/paired_PSTNWR-3_R2.fastq -S /backup/uba/animesh/hisat2_result/paired_PSTNWR-3.sam
+	40689150 reads; of these:
+	  40689150 (100.00%) were paired; of these:
+		10501652 (25.81%) aligned concordantly 0 times
+		23874615 (58.68%) aligned concordantly exactly 1 time
+		6312883 (15.51%) aligned concordantly >1 times
+		----
+		10501652 pairs aligned concordantly 0 times; of these:
+		  2910460 (27.71%) aligned discordantly 1 time
+		----
+		7591192 pairs aligned 0 times concordantly or discordantly; of these:
+		  15182384 mates make up the pairs; of these:
+			8994504 (59.24%) aligned 0 times
+			3085483 (20.32%) aligned exactly 1 time
+			3102397 (20.43%) aligned >1 times
+	88.95% overall alignment rate
+	
+	/backup/uba/animesh/hisat2-2.1.0/hisat2 -p 8 -x /backup/uba/animesh/Triticum_aestivum.IW_ref -1 /backup/uba/animesh/trimmed_reads/paired_PSTDSWR-4_R1.fastq -2 /backup/uba/animesh/trimmed_reads/paired_PSTDSWR-4_R2.fastq -S /backup/uba/animesh/hisat2_result/paired_PSTDSWR-4.sam
+	32999587 reads; of these:
+	  32999587 (100.00%) were paired; of these:
+		9942903 (30.13%) aligned concordantly 0 times
+		18107088 (54.87%) aligned concordantly exactly 1 time
+		4949596 (15.00%) aligned concordantly >1 times
+		----
+		9942903 pairs aligned concordantly 0 times; of these:
+		  1988726 (20.00%) aligned discordantly 1 time
+		----
+		7954177 pairs aligned 0 times concordantly or discordantly; of these:
+		  15908354 mates make up the pairs; of these:
+			11373413 (71.49%) aligned 0 times
+			2185980 (13.74%) aligned exactly 1 time
+			2348961 (14.77%) aligned >1 times
+	82.77% overall alignment rate
+	
+	
+2.	Sort and convert the SAM files to BAM: Alignment data (.bam)
+	
+	samtools view -bS paired_PSTNWR-1.sam -@ 30 > paired_PSTNWR-1.bam
+	
+	samtools view -bS paired_PSTDSWR-2.sam -@ 30 > paired_PSTDSWR-2.bam
+
+		samtools sort -@ 15 -o "/backup/uba/animesh/4. assembly/paired_PSTNWR-1.sam" "/backup/uba/animesh/3. hisat2_result/paired_PSTNWR-1.sam"
+	
+		samtools sort -@ 15 -o "/backup/uba/animesh/4. assembly/paired_PSTDSWR-2.sam" "/backup/uba/animesh/3. hisat2_result/paired_PSTDSWR-2.sam"
+
+		samtools sort -@ 20 -o "/backup/uba/animesh/4. assembly/paired_PSTNWR-3.sam" "/backup/uba/animesh/3. hisat2_result/paired_PSTNWR-3.sam" | samtools view -bS "/backup/uba/animesh/4. assembly/paired_PSTNWR-3.sam" -@ 20 > "/backup/uba/animesh/4. assembly/paired_PSTNWR-3.bam"
+samtools sort -@ 8 -o ERR188044_chrX.bam ERR188044_chrX.sam
+
+samtools view -u "/backup/uba/animesh/3. hisat2_result/paired_PSTNWR-3.sam" | samtools sort -@ 7 - -o "/backup/uba/animesh/4. assembly/paired_PSTNWR-3.bam"
+samtools view -@ 20 -u "/backup/uba/animesh/3. hisat2_result/paired_PSTDSWR-4.sam" | samtools sort -@ 15 - -o "/backup/uba/animesh/4. assembly/paired_PSTDSWR-4.bam"
+
+samtools view -bS eg2.sam > eg2.bam | samtools sort eg2.bam -o eg2.sorted.bam
+
+3.	Assemble transcripts for each sample:
+	#Mapping
+	stringtie -p 8 -G //.gtf -o //.gtf -1 //.bam
+	/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie -p 30 -G "/backup/uba/animesh/4. assembly/Triticum_aestivum.IWGSC.41.gtf" -o "/backup/uba/animesh/4. assembly/paired_PSTDSWR-4.gtf" -l "/backup/uba/animesh/3. hisat2_result/paired_PSTDSWR-4" "/backup/uba/animesh/4. assembly/paired_PSTDSWR-4.bam"
+		./cufflinks -p 8 --library-type fr-unstranded -o cufflinks_out_gtf -G /home/refgene.gtf /home/tophat-/accepted_hits.bam
+
+	#Merge transcripts from all samples:
+	/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie --merge -p 20 -G "/backup/uba/animesh/4. assembly/Triticum_aestivum.IWGSC.41.gtf" -o stringtie_merged_paired.gtf mergelist.txt
+
+	#Estimate transcript abundances and create table counts for Ballgown:
+/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie -e -B -p 8 -G stringtie_merged_paired.gtf -paired_PSTNWR-1.gtf paired_PSTNWR-1.bam
+/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie –e –B -p 8 -G stringtie_merged_paired.gtf -paired_PSTDSWR-2.gtf paired_PSTDSWR-2.bam
+/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie –e –B -p 8 -G stringtie_merged_paired.gtf -paired_PSTNWR-3.gtf paired_PSTNWR-3.bam
+/backup/uba/animesh/stringtie-1.3.5.Linux_x86_64/stringtie –e –B -p 8 -G stringtie_merged_paired.gtf -paired_PSTDSWR-4.gtf paired_PSTDSWR-4.bam
+	
+	#extract fasta
+	/backup/uba/animesh/cufflinks-2.2.1.Linux_x86_64/gffread -w transcripts.fa -g "/backup/uba/animesh/2. hisat2_index/Triticum_aestivum.IWGSC.dna.toplevel.fa" "/backup/uba/animesh/4. assembly/stringtie_merged_paired.gtf"
+
+	# how many transcripts?
+	185456
+	
+	# transcript >200
+	172644
+	
+5.	ORF predictor
+	3a.	predict ORF
+			output is protein seq with orf
+			no ORF - 0 seq
+			with ORF (>output) - 172548 seq
+		172548 seq (orf sequence)
+		
+	3b.	orf less than 100 aa kept -- sequence greater than 300nt/100aa discarded, 
+		17159 seq (>output+100.fasta)
+		
+	3c.	extractCDS from RNA seq transcript as per output+100.fasta
+			ORFoutput is RNAseq transcript sequence with ORF portion less than 100 aa (nt) 
+		17159 seq (>ORFoutput)
+
+4.	coding potential calculator -- >=0.5 CPC score discarded
+		17158 seq with CPC < 0.5 (>CPCoutput.fasta)
+		
+5.	House Keeping Genes
+			SILVA (SSU Ref NR 99, LSU Ref) rRNA data -- two project for SSU and LSU(195 SSU, 1712 LSU)
+			http://noncode.org NONCODE (current version v5.0) is an integrated knowledge database dedicated to non-coding RNAs (excluding tRNAs and rRNAs) (12979)
+			http://gtrnadb2009.ucsc.edu/ Genomic tRNA database (2169)
+			http://combio.pl/rrna/browse/ viridiplante 5SrDNA database (nucleus, mitochondria, plastid) (0)
+			http://greenc.sciencedesigners.com/wiki/Species:Triticum_aestivum Triticum aestivum lncRNAs (27114)
+			http://greengenes.secondgenome.com/ The Greengenes Database 16s rRNA GENES database and tools 
+		6389 seq removed	
+
+makeblastdb –in alltrnas.fasta –dbtype nucl –parse_seqids
+blastn –db F:\LAB\RNASeq_linux\HousekeepingGenes\new –query CPCoutput1.fasta –out lnew_trna.fasta  -evalue 10 -num_threads 4 -outfmt "6 qseqid sseqid pident qlen length mismatch gapope evalue bitscore"
+
+
+# compare the assembled transcripts to known transcripts
+	gffcompare -r Triticum_aestivum.IWGSC.41.gtf -G -o merged stringtie_merged_paired.gtf
+	/backup/uba1/animesh/gffcompare-0.10.8.Linux_x86_64/gffcompare -r /backup/uba1/animesh/millet/reference/icrisat/pearl_millet_v1.1.gtf -i mergelist.txt
+	
+	
+####	
+	
+	/backup/uba1/animesh/gffcompare-0.10.8.Linux_x86_64/gffcompare -r /backup/uba1/animesh/millet/reference/icrisat/pearl_millet_v1.1.gtf -i mergelist.txt
+	/backup/uba1/animesh/stringtie-1.3.5.Linux_x86_64/stringtie -e -B -p 30 -G gffcmp.combined.gtf -o rt_ballgown.gtf /backup/uba1/animesh/millet/mapping/rcrt/Roottreatedtrimmed.bam
+	python prepDE.py -i sample_lst.txt
+	"/usr/local/bin/python2.7" prepDE.py -i sample_list.txt
+
+perl misa.pl 
+samtools stats Leafcontroltrimmed.bam | grep "is sorted:"
+
+1. Index the genome assembly (again!)
+	samtools faidx "/backup/uba1/animesh/millet/reference/icrisat/pearl_millet_v1.1.merged.fa"
+2. Run 'mpileup' to generate VCF format
+	samtools mpileup -g -d8 -Q20 -f "/backup/uba1/animesh/millet/reference/icrisat/pearl_millet_v1.1.merged.fa" Leafcontroltrimmed.bam Leaftreatedtrimmed.bam Rootcontroltrimmed.bam Roottreatedtrimmed.bam > pmrawtrimmed.bcf
+3. Call SNPs...
+	bcftools view -bvcg pmrawtrimmed.bcf > pmvartrimmed.bcf	
+4. Filter
+	
+
+RNAseq aligment measured (RScQC)
+
+Mapped to wheat lncRNA
+		
+##Paper
+		
+Transcript-level expression analysis of RNA-seq experiments with HISAT, StringTie and Ballgown
+https://www.nature.com/articles/nprot.2016.095	
+Nature Protocols volume 11, pages 1650–1667 (2016)
+
+UClncR: Ultrafast and comprehensive long non-coding RNA detection from RNA-seq
+https://www.nature.com/articles/s41598-017-14595-3
+Scientific Reportsvolume 7, Article number: 14196 (2017)
+
+Genome-wide analysis of differentially expressed lncRNAs and mRNAs in primary gonadotrophin adenomas by RNA-seq
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5354857/
+Oncotarget/2016
+
+Characterization of lncRNAs involved in cold acclimation of zebrafish ZF4 cells
+https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0195468
+plosone/2018
+
+scp -r uba@172.16.10.11:/backup/uba/animesh/3_hisat2_dta/PSTNWR-1 /drives/f/R/Wheat (from window terminal)
+scp /backup/uba/animesh/3_hisat2_dta/ballgown_paired_PSTNWR-1.gtf uba1@172.16.10.9:/backup/uba1/animesh/ballgown/PSTNWR-1
+
